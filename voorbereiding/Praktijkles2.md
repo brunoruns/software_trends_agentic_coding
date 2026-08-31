@@ -1,7 +1,15 @@
-## Praktijk 2 (2u)
-Test Driven Development + Agent Loop
+---
+marp: true
+theme: ap-theme
+paginate: true
+---
+
+# Praktijk 2 (2u)
+## Test Driven Development + Agent Loop
 
 Mogelijk de belangrijkste sessie.
+
+---
 
 ### Intro TDD (20 min)
 

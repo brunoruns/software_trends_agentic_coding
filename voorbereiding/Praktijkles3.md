@@ -1,12 +1,23 @@
+---
+marp: true
+theme: ap-theme
+paginate: true
+---
+
+<!-- _class: title-slide -->
 
 # Praktijk 3 (2u)
-Project Structuur, Governance en Kostenbeheersing
+## Project Structuur, Governance en Kostenbeheersing
 
-Doel:
+---
 
-professionele workflow opzetten.
+## Doel
 
-## Deel 1: Goede project setup (30 min)
+Professionele workflow opzetten.
+
+---
+
+### Deel 1: Goede project setup (30 min)
 
 Maak:
 
@@ -22,7 +33,9 @@ project/
 
 Leg uit waarom.
 
-## Deel 2: Context Engineering (30 min)
+---
+
+### Deel 2: Context Engineering (30 min)
 
 Sterk onderbelicht onderwerp.
 Laat deelnemers:
@@ -36,7 +49,9 @@ Agent krijgt pas daarna opdracht.
 
 Vergelijk kwaliteit.
 
-## Deel 3: Kosten beheersen (30 min)
+---
+
+### Deel 3: Kosten beheersen (30 min)
 
 Oefening:
 Meet:
@@ -53,6 +68,8 @@ Qwen
 DeepSeek
 
 Bespreek geschikte use-cases.
+
+---
 
 ### Deel 4: Eindopdracht (30 min)
 
