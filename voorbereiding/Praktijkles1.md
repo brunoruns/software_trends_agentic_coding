@@ -1,8 +1,20 @@
+---
+marp: true
+theme: ap-theme
+paginate: true
+---
+
+<!-- _class: title-slide -->
+
 # Praktijk 1 (2u)
-Cline + VS Code + Eerste Agent Pipeline
+## Cline + VS Code + Eerste Agent Pipeline
+
+---
 
 ## Doel
 Zelf een volledige agent workflow opzetten.
+
+---
 
 ### Deel 1: Setup (30 min)
 
@@ -20,6 +32,8 @@ Gemini Flash
 
 Vergelijk prijs en kwaliteit.
 
+---
+
 ### Deel 2: Eerste Pipeline (30 min)
 
 Project:
@@ -35,6 +49,8 @@ Requirements:
 
 Use Python.
 Write tests.
+
+---
 
 ### Deel 3: Harness Engineering (45 min)
 
@@ -54,6 +70,8 @@ code
 
 
 ldooropen.
+
+---
 
 ### Deel 4: Reflectie (15 min)
 
