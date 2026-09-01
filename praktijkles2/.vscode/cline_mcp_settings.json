@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "url-shortener": {
+      "command": "python",
+      "args": ["src/url_shortener_mcp.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
