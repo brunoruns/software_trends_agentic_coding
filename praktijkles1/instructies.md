@@ -11,6 +11,7 @@ Je zet in deze les een volledige AI-agent workflow op met **VS Code**, **Cline**
 - [VS Code](https://code.visualstudio.com/)
 - Extensie: **Cline** (zoek in de marketplace)
 - Account: [OpenRouter](https://openrouter.ai/) (gratis credits)
+- Opgepast, er zijn beperkingen: 50 requests per dag / 20 per minuut - dit is niet veel!
 
 ### Modellen om te testen
 | Model        | Prijs (per 1M tokens) |
@@ -18,6 +19,7 @@ Je zet in deze les een volledige AI-agent workflow op met **VS Code**, **Cline**
 | DeepSeek V3  | ~€0.30               |
 | Qwen 2.5     | ~€0.35               |
 | Gemini Flash | ~€0.10               |
+| :free | gratis               |
 
 Probeer ze en vergelijk snelheid, kwaliteit en prijs.
 
