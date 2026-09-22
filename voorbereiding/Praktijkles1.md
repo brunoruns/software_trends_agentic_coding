@@ -69,13 +69,12 @@ code
 → tests
 
 
-ldooropen.
+doorlopen.
 
 ---
 
 ### Deel 4: Reflectie (15 min)
 
 Wat deed de agent goed?
-
 Wat deed hij fout?
 

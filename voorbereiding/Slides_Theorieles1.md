@@ -4,36 +4,59 @@ theme: ap-theme
 paginate: true
 ---
 
+<!-- Renderen met mermaid: npx @marp-team/marp-cli Slides_Theorieles1.md --html -o slides.html
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  window.addEventListener('load', () => {
+    document.querySelectorAll('code.language-mermaid').forEach((el) => {
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = el.textContent;
+      (el.closest('pre, marp-pre') || el).replaceWith(div);
+    });
+    mermaid.run();
+  });
+</script>
+<style>
+  svg[id^='mermaid'] { max-width: 100%; max-height: 85vh; }
+</style> -->
+
 <!-- _class: title-slide -->
 
-# Theorieles 1 — Van LLM naar Agentic Coding
-## Software Trends — Agentic Coding
+# Theorieles 1: Van LLM naar Agentic Coding
+## Software Trends: Agentic Coding
 
 ---
 
 ## Inhoud
 
-- LLM's architectuur
+- Onderscheid: LLM, reasoning model, agentic engineering
+- LLM: architectuur en kernconcepten
 - Agent definiëren
 - Autocomplete vs Copilot vs Agent
 - Moderne agentic workflows
-- Systeemdenken in taken, context, feedback loops
+- Systeemdenken: taken, context, feedback loops
 
 ---
 
-## 1. Waarom is dit relevant? (15 min)
+<!-- _class: red-bg -->
 
-### Historiek
+# Waarom is dit relevant?
+
+---
+
+## Historiek
 
 | Tijdperk | Mens | AI |
 |---|---|---|
 | Vroeger | schrijft alles | geen |
-| Copilot | schrijft meeste | suggesties |
+| Autocomplete / Copilot | schrijft meeste | suggereert lijnen |
+| AI pair programmer | schrijft veel | bouwt mee aan features |
 | Agentic | stuurt werk | voert uit |
 
 ---
 
-### Evolutie in praktijk
+## Evolutie in praktijk
 
 - Klassieke softwareontwikkeling
 - IDE met autocomplete
@@ -41,86 +64,150 @@ paginate: true
 - AI pair programmer
 - **Agentic coding**
 
-**[DEMO]
+**[DEMO] Zelfde taak in elk tijdperk: vergelijk de rol van mens en AI**
 
 ---
 
-### Voorbeelden — evolutie opdracht
+## Voorbeelden: evolutie opdracht
 
 ```
-"Write function"        → Copilot
-"Build feature"         → AI pair programmer
-"Add authentication"     → Agentic
-"Create entire MVP"     → Agentic
+"Write function"     → Autocomplete / Copilot
+"Build feature"      → AI pair programmer
+"Add authentication" → Agentic
+"Create entire MVP"  → Agentic
 ```
 
+> Zelfde opdracht, steeds grotere scope voor de AI
 
 ---
 
-## 2. Wat is een LLM? (25 min)
+<!-- _class: red-bg -->
 
-### Kernconcepten — uitgediept
+# Wat is een LLM?
+
+---
+
+## Kernconcepten (1)
 
 | Concept | Uitleg |
 |---|---|
-| **Taalmodel** | Getraind op enorme tekstcorpus (internet, boeken, code) → leert statistische taalpatronen |
-| **Token predictie** | Voorspelt het volgende token op basis van alle voorgaande context; *autoregressief* — elk nieuw token bouwt voort op de vorige |
-| **Context window** | Aantal tokens dat het model in één keer kan verwerken. Bij overschrijding wordt oudere informatie "vergeten" (bv. 4K, 8K, 32K, 200K tokens) |
+| **Taalmodel** | Getraind op enorm tekstcorpus (internet, boeken, code); leert statistische taalpatronen |
+| **Token predictie** | Voorspelt het volgende token op basis van alle voorgaande context; autoregressief |
+| **Context window** | Aantal tokens per keer verwerkbaar; oudere info wordt "vergeten" (4K → 200K) |
 
 ---
 
-### Kernconcepten — uitgediept 
+## Kernconcepten (2)
+
 | Concept | Uitleg |
 |---|---|
-| **Embeddings** | Tekst → dense vector-representatie (512-4096 dimensies). Woorden met gelijkaardige betekenis liggen dicht bij elkaar in vectorruimte. Cruciaal voor *semantisch zoeken*, *retrieval* (RAG) en *similarity* |
-| **Reasoning modellen** | Chain-of-thought, zelfreflectie, stap-voor-stap redeneren. Modellen zoals o1, DeepSeek-R1 gebruiken extra tokens om te "denken" voor ze antwoorden |
-
-> 💡 **Samenhang:** Embeddings bepalen *hoe* een model tekst begrijpt, context window bepaalt *hoeveel* het kan verwerken, en token predictie is het *mechanisme* waarmee het genereert.
+| **Embeddings** | Tekst → dense vector (512-4096 dim); gelijkaardige betekenis ligt dicht bij elkaar; basis voor semantisch zoeken en RAG |
+| **Reasoning modellen** | Chain-of-thought: extra tokens om stap-voor-stap te "denken" (o1, DeepSeek-R1) |
 
 ---
 
-### Waarom deze concepten?
+## Samenhang
+
+- Embeddings = *hoe* het model tekst begrijpt
+- Context window = *hoeveel* het kan verwerken
+- Token predictie = *mechanisme* om te genereren
+
+```mermaid
+flowchart TD
+    TE[Tekst] --> TO[Tokens]
+    TO --> CW[Context window]
+    CW --> M[Model]
+    M --> NT[Volgende token]
+    NT -. autoregressief .-> TO
+```
+
+---
+
+## Impact op agent (1)
 
 | Concept | Impact op agent |
 |---|---|
-| **Context window** | Bepaalt hoeveel code/instructies agent in één keer kan verwerken — te klein → agent "vergeet" eerdere instructies |
-| **Embeddings** | Bepalen hoe de agent semantische gelijkenis ziet tussen codefragmenten; cruciaal voor RAG en *retrieval* |
-| **Tokenisatie** | Niet-westerse talen en code kosten meer tokens dan natuurlijke taal → beïnvloedt effectieve context budget |
-| **Hallucinaties** | Agent verzint APIs, bestanden, functienamen — *altijd verifiëren!* |
+| **Context window** | Te klein → agent "vergeet" eerdere instructies |
+| **Embeddings** | Bepalen semantische gelijkheid van codefragmenten; cruciaal voor retrieval |
+| **Tokenisatie** | Code en niet-westerse talen kosten meer tokens → impact op kosten en context budget |
+| **Hallucinaties** | Agent verzint APIs, bestanden, functienamen. Altijd verifiëren! |
+
 ---
+
+## Impact op agent (2)
+
 | Concept | Impact op agent |
 |---|---|
-| **Prompt kwaliteit** | Hoe preciezer en gestructureerder de taakomschrijving, hoe beter het resultaat |
-| **Reasoning** | Bepaalt of een agent complexe problemen kan oplossen via stap-voor-stap redeneren of enkel simpele taken aankan |
+| **Prompt kwaliteit** | Hoe preciezer en gestructureerder, hoe beter het resultaat |
+| **Reasoning** | Bepaalt of een agent complexe problemen kan oplossen |
 
 ---
 
-### 🔬 Interactief experimenteren met deze concepten
+<!-- _class: red-bg -->
 
-**[LIVE DEMO] Gebruik deze online tools om zelf te spelen met de concepten:**
+## Onderscheid: LLM, reasoning model, agentic engineering
 
-| Tool | Wat zie / test je? |
+---
+
+## Drie niveaus, één opbouw
+
+| Niveau | Wat is het? | Kan het zelf? |
+|---|---|---|
+| **LLM** | Token predictor met context window | Geeft één antwoord op een prompt |
+| **Reasoning model** | LLM + chain-of-thought | Denkt stap-voor-stap, maar kan nog niet handelen |
+| **Agentic engineering** | Agent bouwen: LLM + tools + geheugen + doelen | Plant, voert uit en verifieert in een loop |
+
+> De agent is geen beter model: het is een **systeem rond het model**
+
+---
+
+## Van LLM naar agent
+
+```mermaid
+flowchart LR
+    L["LLM<br/>token predictie"] --> R["Reasoning model<br/>chain-of-thought"]
+    R --> A["Agent<br/>+ tools + doelen"]
+    A -. observe / feedback .-> A
+```
+
+- Reasoning model = beter **antwoord**
+- Agentic engineering = beter **systeem**: tools, loops, validatie
+
+---
+
+## Interactief experimenteren: tools
+
+**[LIVE DEMO]**
+
+| Tool | Wat test je? |
 |---|---|
-| **[tiktokenizer.vercel.app](https://tiktokenizer.vercel.app/)** | Kies verschillende modellen (GPT-4o, o1, DeepSeek, Qwen) en zie hoe **dezelfde prompt** door elk model anders wordt **getokenized** — aantal tokens, splitsing van woorden, impact op context budget |
-| **[bbycroft.net/llm](https://bbycroft.net/llm)** | 3D-visualisatie van een LLM in actie: **embeddings** die worden geladen, **attention layers** die tokens wegen, **token predictie** stap voor stap. Perfect om de architectuur te *zien* |
-| **[projector.tensorflow.org](https://projector.tensorflow.org/)** | TensorFlow **Embedding Projector** — laad data en visualiseer hoe embeddings woorden clusteren in 3D. Zie semantische relaties (koning → koningin, lopen → rennen) |
-| **[OpenRouter — Model Playground](https://openrouter.ai/playground)** | Vergelijk **verschillende modellen** met exact dezelfde prompt. Test GPT-4o, Claude Sonnet, Gemma, DeepSeek, gratis modellen naast elkaar — zie verschil in snelheid, kwaliteit, hallucinaties |
-| **[LMSYS Chatbot Arena](https://lmarena.ai/)** | Blind A/B testen van modellen. Jij geeft een prompt, twee anonieme modellen antwoorden, jij beoordeelt welk beter is — *crowdsourced model ranking* |
+| **[tiktokenizer.vercel.app](https://tiktokenizer.vercel.app/)** | Zelfde prompt per model anders getokenized: impact op context budget |
+| **[bbycroft.net/llm](https://bbycroft.net/llm)** | 3D-visualisatie van een LLM: embeddings, attention, token predictie |
+| **[projector.tensorflow.org](https://projector.tensorflow.org/)** | Embeddings in 3D: semantische clusters (koning → koningin) |
 
 ---
 
-**🧪 Te onderzoeken variabelen:**
+## Interactief experimenteren: tools (2)
+
+| Tool | Wat test je? |
+|---|---|
+| **[OpenRouter Model Playground](https://openrouter.ai/playground)** | Verschillende modellen, zelfde prompt naast elkaar: snelheid, kwaliteit, hallucinaties |
+| **[LMSYS Chatbot Arena](https://lmarena.ai/)** | Blind A/B-testen van modellen: crowdsourced ranking |
+
+---
+
+## Te onderzoeken variabelen
 
 | Wat verander je? | Effect |
 |---|---|
-| **Ander model** (bv. GPT-4o → Gemma) | Zie verschil in codetaal, precisie, snelheid |
-| **Kleinere context** (bv. truncate prompt) | Model "vergeet" eerdere instructies — hallucinaties nemen toe |
-| **Prompt zonder context** vs **met veel context** | Zie hoe context window de outputkwaliteit beïnvloedt |
-| **Andere embedding / tokenizer** | Zelfde zin, ander aantal tokens — impact op kostprijs en effectieve context |
+| **Ander model** (bv. GPT-4o → Gemma) | Verschil in codetaal, precisie, snelheid |
+| **Kleinere context** (truncate prompt) | Model "vergeet" instructies, hallucinaties nemen toe |
+| **Zonder vs met veel context** | Impact van context window op outputkwaliteit |
+| **Andere tokenizer** | Zelfde zin, ander aantal tokens: impact op kosten |
 
 ---
 
-### LLM Vergelijking (via OpenRouter)
+## LLM vergelijking (via OpenRouter of Google AI Studio)
 
 **[DEMO] Zelfde probleem geven aan:**
 
@@ -134,94 +221,101 @@ paginate: true
 
 ---
 
-## 3. Wat is een agent? (25 min)
+<!-- _class: red-bg -->
 
-### Definitie
+# Wat is een agent?
+
+---
+
+## Definitie
 
 > **Agent = LLM + Tools + Geheugen + Doelen**
 
 ---
 
-### Capabilities
+## Capabilities
 
-Agent kan:
+Een agent kan:
 
-- Bestanden lezen
-- Bestanden aanpassen
-- Terminal uitvoeren
+- Bestanden lezen en aanpassen
+- Terminal gebruiken
 - Tests runnen
-- Browser gebruiken
 - Git commands uitvoeren
+- Browser gebruiken
 
 ---
 
-### Visualisatie
+## Visualisatie
 
+```mermaid
+flowchart TD
+    G((Goal)) --> A[Agent]
+    A --> L[LLM]
+    A --> T[Tools]
+    A --> R[Resultaat]
+    R -. observe / feedback .-> A
 ```
-         🎯 Goal
-           |
-         Agent
-           |
-    +------+------+
-    |      |      |
-   LLM   Files  Terminal
-    |      |      |
-  Tests   Git   Browser
-```
-
-**[MEDIA] Voeg architectuurdiagram toe — pijlen tonen feedback loops**
 
 ---
 
-## 4. Wat is agentic coding? (30 min)
+## Tools van een agent
 
-### Workflow
-
-```
-Goal
-  ↓
-Plan
-  ↓
-Implement
-  ↓
-Run tests
-  ↓
-Fix
-  ↓
-Retest
-  ↓
-Done
-```
-
-**[DEMO] Laat een agent een feature bouwen + toon elke stap live**
+| Tool | Wat doet de agent ermee? |
+|---|---|
+| **Files** | Bestanden lezen en aanpassen |
+| **Terminal** | Commando's uitvoeren |
+| **Git** | Commits, branches, merges |
+| **Tests** | Kwaliteit verifiëren |
+| **Browser** | Info opzoeken, UI checken |
 
 ---
 
-### Kernconcepten
+<!-- _class: red-bg -->
+
+# Wat is agentic coding?
+
+---
+
+## Workflow
+
+```mermaid
+flowchart LR
+    GO[Goal] --> P[Plan] --> I[Implement] --> RT{Run tests}
+    RT -- fail --> FX[Fix] --> RT
+    RT -- ok --> D((Done))
+```
+
+---
+
+## Kernconcepten
 
 | Concept | Betekenis |
 |---|---|
-| Plan-Act-Observe | Agent maakt plan, voert uit, evalueert resultaat |
-| Agent loops | Herhalen tot goal bereikt of max iteraties |
-| Tool calling | LLM kiest en roept tools aan |
-| Autonomous execution | Zonder menselijke tussenkomst |
-| Human approval gates | Checkpoints waar developer moet goedkeuren |
+| **Plan-Act-Observe** | Agent maakt plan, voert uit, evalueert resultaat |
+| **Agent loops** | Herhalen tot goal bereikt of max iteraties |
+| **Tool calling** | LLM kiest en roept tools aan |
+| **Autonomous execution** | Zonder menselijke tussenkomst |
+| **Human approval gates** | Checkpoints waar developer moet goedkeuren |
 
 ---
 
-## 5. Denken in agents (25 min)
+<!-- _class: red-bg -->
 
-### Mindset shift
+# Denken in agents
+
+---
+
+## Mindset shift
 
 | ❌ Vroeger | ✅ Nu |
 |---|---|
 | "Hoe implementeer ik dit?" | "Hoe **omschrijf** ik dit probleem?" |
-| — | "Hoe **verifieer** ik de oplossing?" |
-| — | "Hoe kan een agent dit uitvoeren?" |
+| | "Hoe **verifieer** ik de oplossing?" |
+| | "Hoe kan een agent dit uitvoeren?" |
 
 ---
 
-### Framework
+## Framework
 
 | Laag | Vraag |
 |---|---|
@@ -230,17 +324,17 @@ Done
 | **Definition of Done** | Wanneer is het klaar? |
 | **Validatie** | Hoe weten we dat het werkt? |
 
-**[MEDIA] Werkblad/cheatsheet — 'Prompt template' voor taken beschrijven**
-
 ---
 
 ## Samenvatting Les 1
 
-- LLM = token predictor met context
-- Agent = LLM + tools + doelen
-- Workflow = plan → act → observe → loop
+- LLM = token predictor met context window
+- Reasoning model = LLM met chain-of-thought: beter antwoord
+- Agentic engineering = systeem rond het model: tools, geheugen, doelen
+- Agent loop = plan → act → observe → loop
 - Developer wordt **taakomschrijver + validator**
 
 ---
 
 ## Vragen?
+
