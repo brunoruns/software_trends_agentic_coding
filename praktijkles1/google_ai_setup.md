@@ -43,7 +43,7 @@ De key ziet eruit als: `AIzaSy...`
 2. Stel in:
    - **API Provider:** `Google Gemini`
    - **Gemini API Key:** plak hier je key uit Deel 1
-   - **Model:** kies bijvoorbeeld `gemini-2.5-flash` (snel en goedkoop) of `gemini-2.5-pro` (sterker, trager)
+   - **Model:** kies bijvoorbeeld `gemini-2.5-flash` (snel en goedkoop) of `gemini-3.1-pro` (sterker, trager)
 3. Klik op **Done**
 4. Test met een simpele prompt: "Wat is 2 + 2?" — krijg je antwoord, dan werkt de setup
 
